@@ -1,24 +1,104 @@
 #include "simulation.hpp"
-
-#include "Simulation.hpp"
-
-#include <cmath>
 #include <iostream>
-#include <sstream>
-#include <stdexcept>
-#include <iomanip>
+#include <iomanip>  // Per formattare l'output
 
-void check_parameters(SimulationParameters const& parameters) 
+// Costruttore della classe Simulation (abcd minuscoli privati)
+Simulation::Simulation(double A, double B, double C, double D, Population i_c) 
+    : a{A}, b{B}, c{C}, d{D}, newX{0.0}, newY{0.0}, t{0.0} // Inizializzo anche newX, newY, t
 {
-    if (A_ <= 0 || B_ <= 0 || C_ <= 0 || D_ <= 0 || parameters.initial_x < 0 || parameters.initial_y < 0 || parameters.dt <= 0)
-    { // Checking for valid input parameters
-    throw std::runtime_error{"Non valid parameters"};
+    if (a <= 0 || b <= 0 || c <= 0 || d <= 0) {
+        throw std::runtime_error{"Invalid simulation parameters: a, b, c, d must be positive."};
     }
-}
-Simulation::Simulation(SimulationParameters const& parameters){
-  // Controllo dei parametri
-  check_parameters(parameters);
 
+    i_c.t = 0.0;  // Inizializza il tempo
+    if (i_c.x <= 0 || i_c.y <= 0) {
+        throw std::runtime_error{"Invalid initial conditions: the number of preys and predators must be positive."};
+    }
+
+    data.push_back(i_c);  // Aggiungi la popolazione iniziale al vettore
+}
+
+// Metodo per evolvere la simulazione di un dt
+void Simulation::evolve() {
+    double const dt{0.001};
+
+    auto it = data.end(); //prendi l'elemento dopo l'ultimo elemento del vettore
+    --it;  // Sposta l'iteratore sull'ultimo elemento del vettore
+    auto const X = it->x; //chiama X l'x dell'ultimo elemento di data 
+    auto const Y = it->y;
+
+    // Calcolo delle nuove posizioni
+    newX = X + (a - b * Y) * X * dt;
+    newY = Y + (c * X - d) * Y * dt;
+    t = it->t + dt;  // Incrementa il tempo
+
+    // Calcola H per lo stato corrente
+    double newH = -d * log(X) + c * X + b * Y - a * log(Y);
+    data.push_back({newX, newY, t, newH});  // Aggiungi il nuovo stato al vettore dei dati
+}
+
+// Metodo per eseguire la simulazione per un tempo t
+std::vector<Population> Simulation::run(double totalTime) {
+    if (totalTime <= 0) {
+        std::cerr << "Errore: intervallo di tempo inserito è minore o uguale a 0\n";
+        throw std::runtime_error{"Invalid evolution time"};
+    }
+
+    int i = 0;
+    while (i != totalTime * 1000) {  // Simulazione dt per dt
+        evolve();
+        ++i;
+    }
+
+// Controllo che il valore corrente di x e y non sia negativo
+    if (newX <= 0 || newY <= 0) {
+        std::cerr << "Errore: i valori di x e y non possono diventare zero o "
+                    "negativi.\n";
+        throw std::runtime_error(
+            "Invalid state: x and y cannot be zero or negative");
+    }
+
+// Controllo che il valore corrente di x e y non sia infinito
+    if (std::isinf(newX) || std::isinf(newY)) {
+        std::cerr << "Errore: overflow durante la simulazione.\n";
+        throw std::runtime_error("Overflow during simulation");
+    }
+
+// Controllo che x e y non siano NaN
+    if (std::isnan(newX) || std::isnan(newY)) {
+        std::cerr << "Errore: valori NaN non sono ammessi.\n";
+        throw std::runtime_error("NaN value detected in x or y");
+    }
+
+    return data; 
+}
+
+// Metodo per calcolare x relativo all'eq
+double Simulation::relative_x() const {
+    double x_eq = d / c;  // Punto di equilibrio per x
+    return (x_eq != 0) ? (newX / x_eq) : 0;
+}
+
+// Metodo per calcolare y relativo all'eq
+double Simulation::relative_y() const {
+    double y_eq = a / b;  // Punto di equilibrio per y
+    return (y_eq != 0) ? (newY / y_eq) : 0;
+}
+
+// Metodo per calcolare H usando i valori attuali di newX e newY
+double Simulation::calculate_H() const {
+    return -d * log(newX) + c * newX + b * newY - a * log(newY);
+}
+
+// Metodo per stampare i valori correnti di x, y e H
+void Simulation::print() const {
+    std::cout << std::fixed << std::setprecision(4);
+    std::cout << "x(" << t << ") = " << newX
+              << ", x_rel = " << relative_x() << std::endl;
+    std::cout << "y(" << t << ") = " << newY
+              << ", y_rel = " << relative_y() << std::endl;
+    std::cout << "H(" << newX << ", " << newY << ") = " << calculate_H() << std::endl << std::endl;
+}
 
 
 
