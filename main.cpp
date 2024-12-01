@@ -3,13 +3,12 @@
 int main() {
    Simulation simulation{welcome()};
    while (true) {
-    std::cout << "What do you want to do?\n"<<
-    "1-> Evolve populations to t+dt \n"<<
-    "2-> Run for selected runtime \n"
-    "3-> Return data vector \n"<<
-    "4-> Return current populations and X(t), Y(t), H \n"<< 
-    "5-> Stop simulation"
-    << std::endl;
+    std::cout << "What do you want to do?\n" <<
+    "1-> Evolve populations to t+dt \n" <<
+    "2-> Run for selected runtime \n" <<
+    "3-> Return data vector \n" <<
+    "4-> Return current populations and X(t), Y(t), H \n" << 
+    "5-> Stop simulation" << std::endl;
     int input;
     std::cin >> input;
 
