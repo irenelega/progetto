@@ -25,6 +25,8 @@ public:
     void evolve();  // Evolve la simulazione di un passo
     std::vector<Population> run(double t);  // Esegui la simulazione per un tempo t
     void print() const;  // Stampa i dati correnti
+    Population take_last();
+    std::vector<Population> take_data();
 
     // Calcoli relativi all'equilibrio
     double relative_x() const;
@@ -33,7 +35,6 @@ public:
 };
 
 #endif
-
 
 
 
