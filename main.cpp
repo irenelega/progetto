@@ -8,43 +8,42 @@ int main() {
     "2-> Run for selected runtime \n" <<
     "3-> Return data vector \n" <<
     "4-> Return current populations and X(t), Y(t), H \n" << 
-    "5-> Stop simulation" << std::endl;
+    "5-> Stop simulation"
+    << std::endl;
     int input;
     std::cin >> input;
 
     switch (input) {
-    case '1': {
+    case 1: {
       simulation.evolve(); 
       break;
     }
-    case '2': {
+    case 2: {
       double t;
-      std::cout << "Insert run time " << std::endl;
+      std::cout << "For how long do you want to evolve the system?: " << std::endl;
       std::cin >> t;
       simulation.run(t);
       break;
     }
-    case '3': {
-      std::vector<Population> data = simulation.return_data();
-      std::cout << "X(t) and Y(t) estimations" << std::endl;
+    case 3: {
+      std::vector<Population> data = simulation.take_data();
+      std::cout << "Preys, predator and H for each dt" << std::endl;
       std::for_each(data.begin(), data.end(),
-                    [](const Population &P) { print(P); });
-      break;                
-    case '4': {
-      Population P{simulation.return_last_evolve()};
-      std::cout << "Preys and predators' estimated population" << std::endl;
-      std::cout << "X(t):\t" << P.x << "\nY(t):\t" << P.y <<"\nt = \t" << P.t << "\nH =\t " <<P.H<< std::endl;
+                    [](const Population &P) {simulation.print(); });
+      break;           
+    }     
+    case 4: {
+      Population P{simulation.take_last()};
+      std::cout << "Preys and predators' last estimated population" << std::endl;
+      std::cout << "X(t):\t" << P.x << "\nY(t):\t" << P.y << "\nH =\t " << P.H << "\nt = \t" << P.t << std::endl;
       break;              
     }
-    case '5': {
-      std::cout << "Thank you, bye" << std::endl;
+    case 5: {
+      std::cout << "Thank you, bye." << std::endl;
       return 0;
     }
     default:
       std::cout << "Invalid action. Please select again." << std::endl;
     }
   }
-}
-
-  return 0;
 }
