@@ -4,6 +4,7 @@
 #include <vector>
 #include <stdexcept>
 #include <cmath>  // Per log()
+#include <iostream>
 
 // Definizione della struttura Population
 struct Population {
