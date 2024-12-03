@@ -17,14 +17,14 @@ struct Population {
     // Verifica se almeno uno dei componenti di B è zero
     if (K.x == 0) 
     {
-        std::cerr << "Error:trying to divide by zero in the x component" <<std::endl;
-        throw std::runtime_error{"Errore: divisione per zero nella componente X."};
+        std::cerr << "Error: trying to divide by zero in the x component" <<std::endl;
+        throw std::runtime_error{"Errore: divisione per zero nella componente x."};
     }
     if (K.y == 0)
     {   
         std::cerr << "Error:trying to divide by zero in the y component" <<std::endl;
 
-        throw std::runtime_error{"Errore: divisione per zero nella componente Y."};
+        throw std::runtime_error{"Errore: divisione per zero nella componente y."};
     }
     
     
