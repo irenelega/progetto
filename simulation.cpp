@@ -1,5 +1,4 @@
 #include "simulation.hpp"
-#include <iostream>
 #include <iomanip>  // Per formattare l'output
 
 // Costruttore della classe Simulation (abcd minuscoli privati)
