@@ -1,4 +1,5 @@
 #include "simulation.cpp"
+#include <iostream>
 
 int main() {
    Simulation simulation{welcome()};
