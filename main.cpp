@@ -29,7 +29,7 @@ int main() {
       std::vector<Population> data = simulation.take_data();
       std::cout << "Preys, predator and H for each dt" << std::endl;
       std::for_each(data.begin(), data.end(),
-                    [](const Population &P) {simulation.print(); });
+                    [&simulation](const Population &P) {simulation.print(); });
       break;           
     }     
     case 4: {
@@ -47,3 +47,4 @@ int main() {
     }
   }
 }
+
