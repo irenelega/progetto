@@ -1,14 +1,14 @@
-#include "simulation.cpp"
 #include <iostream>
+#include "simulation.cpp"
 
 int main() {
-   Simulation simulation{welcome()};
+   Simulation simulation=welcome();
    while (true) {
     std::cout << "What do you want to do?\n" <<
     "1-> Evolve populations to t+dt \n" <<
     "2-> Run for selected runtime \n" <<
     "3-> Return data vector \n" <<
-    "4-> Return current populations and X(t), Y(t), H \n" << 
+    "4-> Return current populations and X(t), Y(t), H \n" <<
     "5-> Stop simulation"
     << std::endl;
     int input;
@@ -16,7 +16,7 @@ int main() {
 
     switch (input) {
     case 1: {
-      simulation.evolve(); 
+      simulation.evolve();
       break;
     }
     case 2: {
@@ -28,16 +28,17 @@ int main() {
     }
     case 3: {
       std::vector<Population> data = simulation.take_data();
-      std::cout << "Preys, predator and H for each dt" << std::endl;
-      std::for_each(data.begin(), data.end(),
-                    [&simulation](const Population &P) {simulation.print(); });
-      break;           
-    }     
+      std::cout << "Preys, predator, and H for each dt" << std::endl;
+      for (const auto& P : data) {
+          simulation.print(P);  // Passa ogni stato di simulazione a print()
+      }
+      break;
+    }
     case 4: {
-      Population P{simulation.take_last()};
+      Population P=simulation.take_last();
       std::cout << "Preys and predators' last estimated population" << std::endl;
       std::cout << "X(t):\t" << P.x << "\nY(t):\t" << P.y << "\nH =\t " << P.H << "\nt = \t" << P.t << std::endl;
-      break;              
+      break;
     }
     case 5: {
       std::cout << "Thank you, bye." << std::endl;
