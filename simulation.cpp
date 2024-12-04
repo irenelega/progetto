@@ -1,6 +1,6 @@
 #include "simulation.hpp"
-#include <iostream>
 #include <iomanip>  // Per formattare l'output
+#include <limits>
 
 // Costruttore della classe Simulation (abcd minuscoli privati)
 Simulation::Simulation(double A, double B, double C, double D, Population i_c) : a(A), b(B), c(C), d(D), newX(0.0), newY(0.0), t(0.0) // Inizializzo anche newX, newY, t
@@ -183,22 +183,15 @@ double Simulation::relative_y() const {
     return (y_eq != 0) ? (newY / y_eq) : 0;
 }
 
-// Metodo per calcolare H usando i valori attuali di newX e newY
-double Simulation::calculate_H() const {
-    return -d * log(newX) + c * newX + b * newY - a * log(newY);
-}
+//Metodo per calcolare H
+double Simulation::calculate_H(bool useEvolvedValues) const {
+    // Se useEvolvedValues è true, usa newX e newY, altrimenti usa i valori iniziali di x e y
+    double x_gen = useEvolvedValues ? newX : data.front().x;  // Usa newX/newY se useEvolvedValues è true, altrimenti usa i valori iniziali
+    double y_gen = useEvolvedValues ? newY : data.front().y;
 
-// Metodo per stampare i valori correnti di x, y e H
-void Simulation::print(const Population& P) const {
-    std::cout << std::fixed << std::setprecision(4);
-    std::cout << "t =\t" << P.t << std::endl;
-    std::cout << "x(" << P.t << ") =\t" << P.x
-              << ",\tx_rel \t" << relative_x() << std::endl;
-    std::cout << "y(" << P.t << ") =\t" << P.y
-              << ",\ty_rel =\t" << relative_y() << std::endl;
-    std::cout << "H(" << P.x << ", " << P.y << ") =\t" << calculate_H() << std::endl;
+    // Calcola H usando i valori selezionati
+    return -d * log(x_gen) + c * x_gen + b * y_gen - a * log(y_gen);
 }
-
 
 
 std::vector<Population> Simulation::take_data() {
@@ -227,9 +220,21 @@ Population Simulation::take_last() {
     // Prendi l'ultimo stato evolutivo
     const Population &last_state = data.back();
 
-    return Population(last_state.x / eq.x, last_state.y / eq.y, last_state.H, last_state.t);
+    return Population(last_state.x / eq.x, last_state.y / eq.y, calculate_H(), last_state.t);
 }
 
+Population Simulation::reset(){
+    
+    const Population &first_state = data.front();
+
+    data.clear();  // Pulisce il vettore data
+    data.push_back(first_state);  // Aggiungi l'elemento iniziale
+
+    std::cout << "Evolution deleted. Back to initial conditions:" << std::endl;
+     std::cout << "x_rel(" << first_state.t << ")=\t" << first_state.x << "\ny_rel(" << first_state.t << ")=\t" << first_state.y << "\nH =\t " << calculate_H() << "\nt = \t" << first_state.t << std::endl;
+
+    return Population(first_state);
+}
 
 
 
