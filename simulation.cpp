@@ -189,12 +189,12 @@ double Simulation::calculate_H() const {
 // Metodo per stampare i valori correnti di x, y e H
 void Simulation::print(const Population& P) const {
     std::cout << std::fixed << std::setprecision(4);
-    std::cout << "t =\t" << t << std::endl;
-    std::cout << "x(" << t << ") =\t" << newX
+    std::cout << "t =\t" << P.t << std::endl;
+    std::cout << "x(" << P.t << ") =\t" << P.x
               << ",\tx_rel \t" << relative_x() << std::endl;
-    std::cout << "y(" << t << ") =\t" << newY
+    std::cout << "y(" << P.t << ") =\t" << P.y
               << ",\ty_rel =\t" << relative_y() << std::endl;
-    std::cout << "H(" << newX << ", " << newY << ") =\t" << calculate_H() << std::endl << std::endl;
+    std::cout << "H(" << P.x << ", " << P.y << ") =\t" << calculate_H() << std::endl;
 }
 
 
