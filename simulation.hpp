@@ -9,26 +9,28 @@
 // Definizione della struttura Population
 struct Population {
     double x, y, H;
-    double t{0};
-    //operator / definition 
-   inline Population operator/(const Population &K) const 
-   {
+    double t=0;
 
+    // Costruttore esplicito per inizializzare tutti i membri
+    Population(double x_val = 0.0, double y_val = 0.0, double H_val = 0.0, double t_val = 0.0)
+        : x(x_val), y(y_val), H(H_val), t(t_val) {}
+
+    //operator / definition
+   inline Population operator/(const Population &K) const
+   {
     // Verifica se almeno uno dei componenti di B è zero
-    if (K.x == 0) 
+    if (K.x == 0)
     {
-        std::cerr << "Error: trying to divide by zero in the x component" <<std::endl;
-        throw std::runtime_error{"Errore: divisione per zero nella componente x."};
+        std::cerr << "Error:trying to divide by zero in the x component" <<std::endl;
+        throw std::runtime_error("Errore: divisione per zero nella componente X.");
     }
     if (K.y == 0)
-    {   
+    {
         std::cerr << "Error:trying to divide by zero in the y component" <<std::endl;
 
-        throw std::runtime_error{"Errore: divisione per zero nella componente y."};
+        throw std::runtime_error("Errore: divisione per zero nella componente Y.");
     }
-    
-    
-    return Population{x / K.x, y / K.y, t};
+    return Population(x / K.x, y / K.y);
 }
 };
 
@@ -47,7 +49,7 @@ public:
     // Metodi pubblici
     void evolve();  // Evolve la simulazione di un passo
     std::vector<Population> run(double t);  // Esegui la simulazione per un tempo t
-    void print() const;  // Stampa i dati correnti
+    void print(const Population& P) const; // Stampa i dati correnti
     Population take_last();
     std::vector<Population> take_data();
 
@@ -58,7 +60,6 @@ public:
 };
 
 #endif
-
 
 
 
