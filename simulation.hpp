@@ -49,14 +49,14 @@ public:
     // Metodi pubblici
     void evolve();  // Evolve la simulazione di un passo
     std::vector<Population> run(double t);  // Esegui la simulazione per un tempo t
-    void print(const Population& P) const; // Stampa i dati correnti
     Population take_last();
     std::vector<Population> take_data();
+    Population reset();
 
     // Calcoli relativi all'equilibrio
     double relative_x() const;
     double relative_y() const;
-    double calculate_H() const;
+    double calculate_H(bool useEvolvedValues = false) const; //metto false predefinito così se non ho valori validi usa le i_c
 };
 
 #endif
