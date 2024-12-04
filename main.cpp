@@ -1,4 +1,3 @@
-#include <iostream>
 #include "simulation.cpp"
 
 int main() {
@@ -7,8 +6,8 @@ int main() {
     std::cout << "What do you want to do?\n" <<
     "1-> Evolve populations to t+dt \n" <<
     "2-> Run for selected runtime \n" <<
-    "3-> Return data vector \n" <<
-    "4-> Return current normalized populations x(t), y(t), and H, t \n" <<
+    "3-> Return current normalized populations x(t), y(t), and H, t \n" <<
+    "4-> Restart simulation and go back to initial conditions \n" <<
     "5-> Stop simulation"
     << std::endl;
     int input;
@@ -27,17 +26,13 @@ int main() {
       break;
     }
     case 3: {
-      std::vector<Population> data = simulation.take_data();
-      std::cout << "Preys, predator, and H for each dt" << std::endl;
-      for (const auto& P : data) {
-          simulation.print(P);  // Passa ogni stato di simulazione a print()
-      }
+      Population P=simulation.take_last();
+      std::cout << "Preys and predators' last estimated population" << std::endl;
+      std::cout << "x_rel(" << P.t << ")=\t" << P.x << "\ny_rel(" << P.t << ")=\t" << P.y << "\nH =\t " << P.H << "\nt = \t" << P.t << std::endl;
       break;
     }
     case 4: {
-      Population P=simulation.take_last();
-      std::cout << "Preys and predators' last estimated population" << std::endl;
-      std::cout << "x(" << P.t << ")=\t" << P.x << "\ny(" << P.t << ")=\t" << P.y << "\nH =\t " << P.H << "\nt = \t" << P.t << std::endl;
+      simulation.reset();
       break;
     }
     case 5: {
