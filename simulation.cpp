@@ -111,7 +111,7 @@ void Simulation::evolve() {
         t = it->t;              // Imposta t all'ultimo valore di t
     }
 
-    std::cout << "Before evolve: t = " << t << std::endl;
+    std::cout << "Starting simulation in t = " << t << std::endl;
 
     auto it = data.end(); //prendi l'elemento dopo l'ultimo elemento del vettore
     --it;  // Sposta l'iteratore sull'ultimo elemento del vettore
@@ -127,7 +127,9 @@ void Simulation::evolve() {
     // Calcola H per lo stato corrente
     double newH = -d * log(X) + c * X + b * Y - a * log(Y);
     data.push_back({newX, newY, newH, t});  // Aggiungi il nuovo stato al vettore dei dati
-    std::cout << newX << "\t" << newY << "\t" <<  newH << "\t" << t << std::endl;
+    std::cout << "x = " << newX << "\ty = " << newY << "\tH = " << newH << "\tt = " << t << std::endl;
+    std::cout << "x_rel = " << relative_x() << "\ty_rel = " << relative_y() << std::endl;
+    std::cout << std::endl;
 }
 
 // Metodo per eseguire la simulazione per un tempo t
@@ -220,7 +222,7 @@ std::vector<Population> Simulation::take_data() {
 
 Population Simulation::take_last() {
     // Calcola il punto di equilibrio
-    const Population eq(a / c, a / b);
+    const Population eq(d / c, a / b);
 
     // Prendi l'ultimo stato evolutivo
     const Population &last_state = data.back();
@@ -255,5 +257,3 @@ Simulation welcome() {
 
     return Simulation(A, B, C, D, i_c);
 }
-
-
