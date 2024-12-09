@@ -169,7 +169,7 @@ Population Simulation::reset(){
     data.push_back(first_state);  // Aggiungi l'elemento iniziale
 
     std::cout << "Evolution deleted. Back to initial conditions:" << std::endl;
-     std::cout << "x_rel(" << first_state.t << ")=\t" << first_state.x << "\ny_rel(" << first_state.t << ")=\t" << first_state.y << "\nH =\t " << calculate_H() << "\nt = \t" << first_state.t << std::endl;
+     std::cout << "x(" << first_state.t << ")=\t" << first_state.x << "\ny(" << first_state.t << ")=\t" << first_state.y << "\nH =\t " << calculate_H() << "\nt = \t" << first_state.t << std::endl;
 
     return Population(first_state);
 }
