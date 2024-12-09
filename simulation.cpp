@@ -1,101 +1,41 @@
 #include "simulation.hpp"
 #include <iomanip>  // Per formattare l'output
 #include <limits>
+#include <string>
 
 // Costruttore della classe Simulation (abcd minuscoli privati)
-Simulation::Simulation(double A, double B, double C, double D, Population i_c) : a(A), b(B), c(C), d(D), newX(0.0), newY(0.0), t(0.0) // Inizializzo anche newX, newY, t
+Simulation::Simulation(double A, double B, double C, double D, Population i_c) : a(A), b(B), c(C), d(D), newX(0.0), newY(0.0), t(0.0)
 {
-    while (a <= 0) {
-        std::cout << "Please, insert a value of A grater than zero: ";
-        std::cin >> a;  // Chiede un nuovo input
+    auto askForValidInput = [](const std::string& prompt, double& value) {
+        while (true) {
+            std::cout << prompt;
+            std::cin >> value;  // Legge direttamente un double
 
-        // Controlla se l'input è valido
-        if (std::cin.fail() || a <= 0) {
-            std::cin.clear(); // Rimuove il flag di errore
-            std::cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n'); // Ignora il resto della riga
-            std::cerr << "Input not valid." << std::endl;
-        } else {
-            break; // Uscire dal ciclo quando l'input è valido
-            }
-    }
-     
-     while (b <= 0) {
-        std::cout << "Please, insert a value of B grater than zero: ";
-        std::cin >> b;  // Chiede un nuovo input
-
-            // Controlla se l'input è valido
-        if (std::cin.fail() || b <= 0) {
-            std::cin.clear(); // Rimuove il flag di errore
-            std::cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n'); // Ignora il resto della riga
-            std::cerr << "Input not valid." << std::endl;
+            if (std::cin.fail() || value <= 0) {
+                std::cin.clear();  // Rimuove il flag di errore
+                std::cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n');  // Ignora il resto della riga
+                std::cerr << "Input not valid. Please enter a number greater than zero." << std::endl;
             } else {
-                break; // Uscire dal ciclo quando l'input è valido
+                break;  // Esce dal ciclo se l'input è valido
             }
-    }
-     
-    while (c <= 0) {
-        std::cout << "Please, insert a value of C grater than zero: ";
-        std::cin >> c;  // Chiede un nuovo input
-
-        // Controlla se l'input è valido
-        if (std::cin.fail() || c <= 0) {
-            std::cin.clear(); // Rimuove il flag di errore
-            std::cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n'); // Ignora il resto della riga
-            std::cerr << "Input not valid." << std::endl;
-        } else {
-            break; // Uscire dal ciclo quando l'input è valido
         }
-      
-    }
-      
-    while (d <= 0) {
-        std::cout << "Please, insert a value of D grater than zero: ";
-        std::cin >> d;  // Chiede un nuovo input
+    };
 
-        // Controlla se l'input è valido
-        if (std::cin.fail() || d <= 0) {
-            std::cin.clear(); // Rimuove il flag di errore
-            std::cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n'); // Ignora il resto della riga
-            std::cerr << "Input not valid." << std::endl;
-        } else {
-            break; // Uscire dal ciclo quando l'input è valido
-            }
-    }
+    // Utilizzo della funzione per chiedere l'input per i parametri
+    askForValidInput("A: ", a);
+    askForValidInput("B: ", b);
+    askForValidInput("C: ", c);
+    askForValidInput("D: ", d);
 
     i_c.t = 0.0;  // Inizializza il tempo
 
-    
-         while (i_c.x <= 0) {
-            std::cout << "Please, insert a number of preys grater than zero: ";
-            std::cin >> i_c.x;  // Chiede un nuovo input
+    // Chiedi i valori iniziali per la popolazione
+    askForValidInput("Number of preys: ", i_c.x);
+    askForValidInput("Number of predators: ", i_c.y);
 
-            // Controlla se l'input è valido
-            if (std::cin.fail() || i_c.x <= 0) {
-                std::cin.clear(); // Rimuove il flag di errore
-                std::cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n'); // Ignora il resto della riga
-                std::cerr << "Input not valid." << std::endl;
-            } else {
-                break; // Uscire dal ciclo quando l'input è valido
-            }
-        }
-    
-    
-         while (i_c.y <= 0) {
-            std::cout << "Please, insert a number of predators grater than zero: ";
-            std::cin >> i_c.y;  // Chiede un nuovo input
-
-            // Controlla se l'input è valido
-            if (std::cin.fail() || i_c.y <= 0) {
-                std::cin.clear(); // Rimuove il flag di errore
-                std::cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n'); // Ignora il resto della riga
-                std::cerr << "Input not valid." << std::endl;
-            } else {
-                break; // Uscire dal ciclo quando l'input è valido
-            }
-        }
-    
     data.push_back(i_c);  // Aggiungi la popolazione iniziale al vettore
 }
+
 
 // Metodo per evolvere la simulazione di un dt
 void Simulation::evolve() {
@@ -124,6 +64,18 @@ void Simulation::evolve() {
     // Incrementa il tempo
     t += dt;
 
+    // Controllo che il valore corrente di x e y non sia negativo
+    if (newX <= 0 || newY <= 0) {
+        std::cerr << "Error: the number of preys or predators went down to zero or less than zero.\n";
+        throw std::runtime_error("x or y =0");
+    }
+
+// Controllo che il valore corrente di x e y non sia infinito
+    if (std::isinf(newX) || std::isinf(newY)) {
+        std::cerr << "Error: overflow during simulation.\n";
+        throw std::runtime_error("overflow");
+    }
+
     // Calcola H per lo stato corrente
     double newH = -d * log(X) + c * X + b * Y - a * log(Y);
     data.push_back({newX, newY, newH, t});  // Aggiungi il nuovo stato al vettore dei dati
@@ -136,14 +88,13 @@ void Simulation::evolve() {
 std::vector<Population> Simulation::run(double totalTime) {
     
         while (totalTime<=0) {
-            std::cout << "Please, insert a time interval grater than zero:  ";
-            std::cin >> totalTime;  // Chiede un nuovo input
 
-            // Controlla se l'input è valido
-            if (std::cin.fail() || totalTime <= 0) {
+            if (std::cin.fail() || totalTime<=0) {
                 std::cin.clear(); // Rimuove il flag di errore
                 std::cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n'); // Ignora il resto della riga
                 std::cerr << "Input not valid." << std::endl;
+                std::cout << "Please, insert a time interval grater than zero:  ";
+                std::cin >> totalTime;  // Chiede un nuovo input
             } else {
                 break; // Uscire dal ciclo quando l'input è valido
             }
@@ -153,19 +104,6 @@ std::vector<Population> Simulation::run(double totalTime) {
     while (i != totalTime * 1000) {  // Simulazione dt per dt
         evolve();
         ++i;
-    }
-
-// Controllo che il valore corrente di x e y non sia negativo
-    if (newX <= 0 || newY <= 0) {
-        std::cerr << "Error: the number of preys and predators can not be zero or less than zero.\n";
-        throw std::runtime_error(
-            "Error: the number of preys and predators can not be zero or less than zero.");
-    }
-
-// Controllo che il valore corrente di x e y non sia infinito
-    if (std::isinf(newX) || std::isinf(newY)) {
-        std::cerr << "Error: overflow during simulation.\n";
-        throw std::runtime_error("Overflow during simulation");
     }
 
     return data;
@@ -200,7 +138,7 @@ std::vector<Population> Simulation::take_data() {
 
     if (c == 0 || b == 0) {
         std::cerr << "Error: invalid equilibrium point calculation." << std::endl;
-        throw std::runtime_error("Invalid equilibrium point calculation.");
+        throw std::runtime_error("dividing by 0");
     }
 
     // Crea un nuovo vettore per i dati normalizzati
@@ -237,28 +175,11 @@ Population Simulation::reset(){
 }
 
 
-
 Simulation welcome() {
-    double A, B, C, D;
+    double A=0.0, B=0.0, C=0.0, D=0.0;
     Population i_c;
 
-    std::cout << "Welcome! This is a simulation of the Lotka-Volterra model.\nInsert the equation's parameters:\nA: ";
-    std::cin >> A;
-
-    std::cout << "B: ";
-    std::cin >> B;
-
-    std::cout << "C: ";
-    std::cin >> C;
-
-    std::cout << "D: ";
-    std::cin >> D;
-
-    std::cout << "Now insert the initial number of preys: ";
-    std::cin >> i_c.x;
-
-    std::cout << "and the initial number of predators: ";
-    std::cin >> i_c.y;
-
+    std::cout << "Welcome! This is a simulation of the Lotka-Volterra model.\nInsert the equation's parameters:\n";
+    
     return Simulation(A, B, C, D, i_c);
 }
