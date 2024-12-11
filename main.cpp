@@ -43,8 +43,15 @@ int main() {
       std::cout << "Thank you, bye." << std::endl;
       return 0;
     }
-    default:
-      std::cout << "Invalid action. Please select again." << std::endl;
+    default: {
+      if (std::cin.fail() || input < 1 || input > 5) {
+        std::cin.clear(); // Rimuove il flag di errore
+        std::cin.ignore(std::numeric_limits<std::streamsize>::max(),
+                        '\n'); // Ignora il resto della riga
+        std::cerr << "Input not valid. Please, insert a number from 1 to 5."
+                  << std::endl;
+      }
+    }
     }
   }
 }
