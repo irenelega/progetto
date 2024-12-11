@@ -99,8 +99,9 @@ std::vector<Population> Simulation::run(double totalTime) {
       std::cin.clear(); // Rimuove il flag di errore
       std::cin.ignore(std::numeric_limits<std::streamsize>::max(),
                       '\n'); // Ignora il resto della riga
-      std::cerr << "Input not valid." << std::endl;
-      std::cout << "Please, insert a time interval grater than zero:  ";
+      std::cerr << "Input not valid. Please, insert a time interval grater "
+                   "than zero: "
+                << std::endl;
       std::cin >> totalTime; // Chiede un nuovo input
     } else {
       break; // Uscire dal ciclo quando l'input è valido
