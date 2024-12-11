@@ -93,7 +93,7 @@ void Simulation::evolve() {
 // Metodo per eseguire la simulazione per un tempo t
 std::vector<Population> Simulation::run(double totalTime) {
 
-  while (totalTime <= 0) {
+  while (true) {
 
     if (std::cin.fail() || totalTime <= 0) {
       std::cin.clear(); // Rimuove il flag di errore
