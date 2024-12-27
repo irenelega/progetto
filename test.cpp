@@ -75,11 +75,11 @@ TEST_CASE("Simulation calculate_H()") {
 }
 
 TEST_CASE("Simulation relative_x()") {
-  double rel_x = sim.relative_x();
-  CHECK(abs(rel_x - 14.9955) < 1e-6);
+  double x_rel = sim.relative_x();
+  CHECK(abs(x_rel - 14.9955) < 1e-6);
 }
 
 TEST_CASE("Simulation relative_y()") {
-  double rel_y = sim.relative_y();
-  CHECK(abs(rel_y - 2.507) < 1e-6);
+  double y_rel = sim.relative_y();
+  CHECK(abs(y_rel - 2.507) < 1e-6);
 }
