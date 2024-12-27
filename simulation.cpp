@@ -6,35 +6,6 @@
 // Costruttore della classe Simulation (abcd minuscoli privati)
 Simulation::Simulation(double A, double B, double C, double D, Population i_c)
     : a(A), b(B), c(C), d(D), newX(0.0), newY(0.0), t(0.0) {
-  auto askForValidInput = [](const std::string &prompt, double &value) {
-    while (true) {
-      std::cout << prompt;
-      std::cin >> value; // Legge direttamente un double
-
-      if (std::cin.fail() || value <= 0) {
-        std::cin.clear(); // Rimuove il flag di errore
-        std::cin.ignore(std::numeric_limits<std::streamsize>::max(),
-                        '\n'); // Ignora il resto della riga
-        std::cerr << "Input not valid. Please enter a number greater than zero."
-                  << std::endl;
-      } else {
-        break; // Esce dal ciclo se l'input è valido
-      }
-    }
-  };
-
-  // Utilizzo della funzione per chiedere l'input per i parametri
-  askForValidInput("A: ", a);
-  askForValidInput("B: ", b);
-  askForValidInput("C: ", c);
-  askForValidInput("D: ", d);
-
-  i_c.t = 0.0; // Inizializza il tempo
-
-  // Chiedi i valori iniziali per la popolazione
-  askForValidInput("Number of preys: ", i_c.x);
-  askForValidInput("Number of predators: ", i_c.y);
-
   data.push_back(i_c); // Aggiungi la popolazione iniziale al vettore
 }
 
@@ -182,8 +153,8 @@ Population Simulation::reset() {
 
   std::cout << "Evolution deleted. Back to initial conditions:" << std::endl;
   std::cout << "x(" << first_state.t << ")=\t" << first_state.x << "\ny("
-            << first_state.t << ")=\t" << first_state.y << "\nH =\t "
-            << calculate_H() << "\nt = \t" << first_state.t << std::endl;
+            << first_state.t << ")=\t" << first_state.y << "\nH =\t"
+            << calculate_H() << "\nt =\t" << first_state.t << std::endl;
 
   return Population(first_state);
 }
@@ -194,6 +165,35 @@ Simulation welcome() {
 
   std::cout << "Welcome! This is a simulation of the Lotka-Volterra "
                "model.\nInsert the equation's parameters:\n";
+
+  auto askForValidInput = [](const std::string &prompt, double &value) {
+    while (true) {
+      std::cout << prompt;
+      std::cin >> value; // Legge direttamente un double
+
+      if (std::cin.fail() || value <= 0) {
+        std::cin.clear(); // Rimuove il flag di errore
+        std::cin.ignore(std::numeric_limits<std::streamsize>::max(),
+                        '\n'); // Ignora il resto della riga
+        std::cerr << "Input not valid. Please enter a number greater than zero."
+                  << std::endl;
+      } else {
+        break; // Esce dal ciclo se l'input è valido
+      }
+    }
+  };
+
+  // Utilizzo della funzione per chiedere l'input per i parametri
+  askForValidInput("A: ", A);
+  askForValidInput("B: ", B);
+  askForValidInput("C: ", C);
+  askForValidInput("D: ", D);
+
+  i_c.t = 0.0; // Inizializza il tempo
+
+  // Chiedi i valori iniziali per la popolazione
+  askForValidInput("Number of preys: ", i_c.x);
+  askForValidInput("Number of predators: ", i_c.y);
 
   return Simulation(A, B, C, D, i_c);
 }
