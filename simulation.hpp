@@ -49,7 +49,6 @@ public:
   void evolve();                         // Evolve la simulazione di un passo
   std::vector<Population> run(double t); // Esegui la simulazione per un tempo t
   Population take_last();
-  std::vector<Population> take_data();
   Population reset();
 
   // Calcoli relativi all'equilibrio
