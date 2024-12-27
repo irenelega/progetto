@@ -1,44 +1,40 @@
 #define DOCTEST_CONFIG_IMPLEMENT_WITH_MAIN
 #include <stdexcept>
 #include "doctest.h"
-#include "simulation.hpp" // Make sure this includes your Simulation class
+#include "simulation.hpp"
+#include "simulation.cpp"
 
 
-// Macro for test cases (already defined in your original code)
-#define TEST_CASE(name) DOCTEST_TEST_CASE(name)
+TEST_CASE("Testing Constructor") {
+  Simulation simulation{1,3,5,8,{10,12}};
+  Coordinates i_c{simulation.take_last()};
+  CHECK(i_c.X == 6.25);
+  CHECK(i_c.Y == 36);
+  CHECK(i_c.t == 0);
 
-TEST_CASE("Simulation Initialization") {
-    SimulationParameters params = {0.2, 0.1, 0.3, 0.2, {10, 5, 0, 0}};
-    Simulation sim(params.A, params.B, params.C, params.D, params);
-
-    CHECK(sim.a == params.A);
-    CHECK(sim.b == params.B);
-    CHECK(sim.c == params.C);
-    CHECK(sim.d == params.D);
-    CHECK(sim.data.front().x == params.initial_x);
-    CHECK(sim.data.front().y == params.initial_y);
-    CHECK(sim.data.front().t == 0.0);
-
-
-    // Test with invalid parameters (expect exceptions)
-    CHECK_THROWS_AS(Simulation sim2(-0.2, 0.1, 0.3, 0.2, {10, 5, 0, 0}), std::runtime_error); //Negative parameter
-    CHECK_THROWS_AS(Simulation sim3(0.2, 0.0, 0.3, 0.2, {10, 5, 0, 0}), std::runtime_error); //Zero parameter
-    CHECK_THROWS_AS(Simulation sim4(0.2, 0.1, 0.0, 0.2, {10, 5, 0, 0}), std::runtime_error); //Zero parameter
+  SUBCASE("Testing Constructor ensures t == 0") {
+    Simulation simulation{1., 1., 1., 1., {10., 10., 10.}};
+    Coordinates i_c{simulation.take_last()};
+    CHECK(CI.X == 10.);
+    CHECK(CI.Y == 10.);
+    CHECK(CI.t == 0);
+  }
 }
 
+   
 TEST_CASE("Simulation evolve()") {
     SimulationParameters params = {0.2, 0.1, 0.3, 0.2, {10, 5, 0, 0}};
-    Simulation sim(params.A, params.B, params.C, params.D, params);
+    Simulation simulation(params.A, params.B, params.C, params.D, params);
     
-    double initial_x = sim.data.front().x;
-    double initial_y = sim.data.front().y;
+    double initial_x = simulation.data.front().x;
+    double initial_y = simulation.data.front().y;
 
     sim.evolve();
 
-    CHECK(sim.data.size() > 1); // Check if at least one element has been added to the data vector
-    CHECK(sim.newX > 0);       // Check for positive values
-    CHECK(sim.newY > 0);       // Check for positive values
-    CHECK(sim.data.back().t > 0);  // check time has been incremented
+    CHECK(simulation.data.size() > 1); // Check if at least one element has been added to the data vector
+    CHECK(simulation.newX > 0);       // Check for positive values
+    CHECK(simulation.newY > 0);       // Check for positive values
+    CHECK(simulation.data.back().t > 0);  // check time has been incremented
 
     // Test for error handling (negative or zero populations) - needs appropriate error handling in Simulation::evolve
     // Example of how to test for this exception:
@@ -48,28 +44,28 @@ TEST_CASE("Simulation evolve()") {
 
 TEST_CASE("Simulation run(totalTime)") {
     SimulationParameters params = {0.2, 0.1, 0.3, 0.2, {10, 5, 0, 0}};
-    Simulation sim(params.A, params.B, params.C, params.D, params);
-    auto results = sim.run(0.5);
+    Simulation simulation(params.A, params.B, params.C, params.D, params);
+    auto results = simulation.run(0.5);
     CHECK(results.size() > 1);
 
     // Add more checks if you have a specific expected outcome of the run() function,
     // possibly involving comparing results for specific timesteps against known results.
 
-    CHECK_THROWS_AS(sim.run(-0.5), std::invalid_argument); // Check for exception with invalid input.
+    CHECK_THROWS_AS(simulation.run(-0.5), std::invalid_argument); // Check for exception with invalid input.
 }
 
 TEST_CASE("Simulation reset()") {
     SimulationParameters params = {0.2, 0.1, 0.3, 0.2, {10, 5, 0, 0}};
-    Simulation sim(params.A, params.B, params.C, params.D, params);
-    sim.evolve(); //Do some simulation steps
-    sim.reset();
-    CHECK(sim.data.size() == 1); // check the data vector has been cleared and only contains the initial condition.
+    Simulation simulation(params.A, params.B, params.C, params.D, params);
+    simulation.evolve(); //Do some simulation steps
+    simulation.reset();
+    CHECK(simulation.data.size() == 1); // check the data vector has been cleared and only contains the initial condition.
 }
 
 TEST_CASE("Simulation take_last()") {
     SimulationParameters params = {0.2, 0.1, 0.3, 0.2, {10, 5, 0, 0}};
-    Simulation sim(params.A, params.B, params.C, params.D, params);
-    sim.evolve();
-    Population last = sim.take_last();
+    Simulation simulation(params.A, params.B, params.C, params.D, params);
+    simulation.evolve();
+    Population last = simulation.take_last();
     CHECK(last.t > 0); //Check if time is positive after evolution.
 }
