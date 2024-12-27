@@ -31,7 +31,7 @@ int main() {
       std::cout << "Preys and predators' last estimated population"
                 << std::endl;
       std::cout << "x_rel(" << P.t << ")=\t" << P.x << "\ny_rel(" << P.t
-                << ")=\t" << P.y << "\nH =\t " << P.H << "\nt = \t" << P.t
+                << ")=\t" << P.y << "\nH =\t" << P.H << "\nt = \t" << P.t
                 << std::endl;
       break;
     }
@@ -55,4 +55,3 @@ int main() {
     }
   }
 }
-
