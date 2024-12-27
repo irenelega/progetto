@@ -4,6 +4,19 @@
 #include "simulation.hpp"
 #include <stdexcept>
 
+TEST_CASE("Simulation evolve() negative populations and overflow") {
+
+  SUBCASE("Negative populations") {
+    Simulation sim(0.2, 0.1, 0.3, 0.2, {0, 5});
+    CHECK_THROWS_AS(sim.evolve(), std::runtime_error);
+  }
+
+  SUBCASE("Overflow populations") {
+    Simulation sim(0.2, 0.1, 0.3, 0.2, {1e10, 1e10});
+    CHECK_THROWS_AS(sim.evolve(), std::runtime_error);
+  }
+}
+
 Simulation sim(0.2, 0.1, 0.3, 0.2, {10, 5});
 
 TEST_CASE("Simulation Constructor") {
@@ -11,6 +24,14 @@ TEST_CASE("Simulation Constructor") {
   CHECK(abs(last.x - 15) < 1e-6);
   CHECK(abs(last.y - 2.5) < 1e-6);
   CHECK(last.t == 0);
+}
+
+TEST_CASE("Testing operator /") {
+  Population P{10, 10};
+  Population eq{1, 2};
+  Population rel = P / eq;
+  CHECK(rel.x == 10);
+  CHECK(rel.y == 5);
 }
 
 TEST_CASE("Simulation evolve()") {
@@ -46,4 +67,19 @@ TEST_CASE("Simulation take_last()") {
   sim.evolve();
   Population last = sim.take_last();
   CHECK(last.t > 0);
+}
+
+TEST_CASE("Simulation calculate_H()") {
+  double H = sim.calculate_H();
+  CHECK(abs(H - 2.7176) < 1e-4);
+}
+
+TEST_CASE("Simulation relative_x()") {
+  double rel_x = sim.relative_x();
+  CHECK(abs(rel_x - 14.9955) < 1e-6);
+}
+
+TEST_CASE("Simulation relative_y()") {
+  double rel_y = sim.relative_y();
+  CHECK(abs(rel_y - 2.507) < 1e-6);
 }
