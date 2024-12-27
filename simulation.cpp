@@ -114,25 +114,6 @@ double Simulation::calculate_H(bool useEvolvedValues) const {
   return -d * log(x_gen) + c * x_gen + b * y_gen - a * log(y_gen);
 }
 
-std::vector<Population> Simulation::take_data() {
-  // Calcola il punto di equilibrio una volta per tutte
-  const Population eq(a / c, a / b);
-
-  if (c == 0 || b == 0) {
-    std::cerr << "Error: invalid equilibrium point calculation." << std::endl;
-    throw std::runtime_error("dividing by 0");
-  }
-
-  // Crea un nuovo vettore per i dati normalizzati
-  std::vector<Population> normalized(data.size());
-
-  // Usa std::transform per normalizzare i dati
-  std::transform(data.begin(), data.end(), normalized.begin(),
-                 [eq](const Population &P) { return P / eq; });
-
-  return normalized;
-}
-
 Population Simulation::take_last() {
   // Calcola il punto di equilibrio
   const Population eq(d / c, a / b);
