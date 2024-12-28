@@ -165,16 +165,16 @@ Simulation welcome() {
   };
 
   // Utilizzo della funzione per chiedere l'input per i parametri
-  askForValidInput("A: ", A);
-  askForValidInput("B: ", B);
-  askForValidInput("C: ", C);
-  askForValidInput("D: ", D);
+  askForValidInput("Preys' reproduction rate A:\t", A);
+  askForValidInput("Preys' death rate B:\t\t", B);
+  askForValidInput("Predators' reproduction rate C:\t", C);
+  askForValidInput("Predators' death rate D:\t", D);
 
   i_c.t = 0.0; // Inizializza il tempo
 
   // Chiedi i valori iniziali per la popolazione
-  askForValidInput("Number of preys: ", i_c.x);
-  askForValidInput("Number of predators: ", i_c.y);
+  askForValidInput("Number of preys:\t", i_c.x);
+  askForValidInput("Number of predators:\t", i_c.y);
 
   return Simulation(A, B, C, D, i_c);
 }
