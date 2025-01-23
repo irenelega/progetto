@@ -53,11 +53,6 @@ void Simulation::evolve() {
   double newH = -d * log(X) + c * X + b * Y - a * log(Y);
   data.push_back(
       {newX, newY, newH, t}); // Aggiungi il nuovo stato al vettore dei dati
-  std::cout << "x = " << newX << "\ty = " << newY << "\tH = " << newH
-            << "\tt = " << t << std::endl;
-  std::cout << "x_rel = " << relative_x() << "\ty_rel = " << relative_y()
-            << std::endl;
-  std::cout << std::endl;
 }
 
 // Metodo per eseguire la simulazione per un tempo t
@@ -132,11 +127,24 @@ Population Simulation::reset() {
   data.push_back(first_state); // Aggiungi l'elemento iniziale
 
   std::cout << "Evolution deleted. Back to initial conditions:" << std::endl;
-  std::cout << "x(" << first_state.t << ")=\t" << first_state.x << "\ny("
-            << first_state.t << ")=\t" << first_state.y << "\nH =\t"
-            << calculate_H() << "\nt =\t" << first_state.t << std::endl;
-
+  
   return Population(first_state);
+}
+
+std::vector<Population> Simulation::print_data() {
+    // Calcola il punto di equilibrio
+    Population const eq{d / c, a / b}; 
+
+    // Crea un vettore per i dati normalizzati
+    std::vector<Population> norm_data(data.size());
+
+    // Usa std::transform per normalizzare i dati
+    std::transform(data.begin(), data.end(), norm_data.begin(),
+                   [this, eq](const Population& P) {
+                       return Population(P.x / eq.x, P.y / eq.y, calculate_H(), P.t); // Normalizza ogni elemento di data
+                   });
+
+    return norm_data;  // Restituisci il vettore normalizzato
 }
 
 Simulation welcome() {
