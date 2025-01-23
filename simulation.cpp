@@ -2,6 +2,7 @@
 #include <iomanip> // Per formattare l'output
 #include <limits>
 #include <string>
+namespace LotkaVolterra {
 
 // Costruttore della classe Simulation (abcd minuscoli privati)
 Simulation::Simulation(double A, double B, double C, double D, Population i_c)
@@ -39,15 +40,13 @@ void Simulation::evolve() {
 
   // Controllo che il valore corrente di x e y non sia negativo
   if (newX <= 0 || newY <= 0) {
-    std::cerr << "Error: the number of preys or predators went down to zero or "
-                 "less than zero.\n";
-    throw std::runtime_error("x or y =0");
+    throw std::runtime_error("The number of preys or predators went down to zero or "
+                 "less than zero.\n");
   }
 
   // Controllo che il valore corrente di x e y non sia infinito
   if (std::isinf(newX) || std::isinf(newY)) {
-    std::cerr << "Error: overflow during simulation.\n";
-    throw std::runtime_error("overflow");
+    throw std::runtime_error("Overflow during simulation.\n");
   }
 
   // Calcola H per lo stato corrente
@@ -177,4 +176,5 @@ Simulation welcome() {
   askForValidInput("Number of predators:\t", i_c.y);
 
   return Simulation(A, B, C, D, i_c);
+}
 }
