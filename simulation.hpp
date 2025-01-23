@@ -6,6 +6,8 @@
 #include <stdexcept>
 #include <vector>
 
+namespace LotkaVolterra {
+
 // Definizione della struttura Population
 struct Population {
   double x, y, H;
@@ -57,5 +59,6 @@ public:
   double calculate_H(bool useEvolvedValues = false)
       const; // metto false predefinito così se non ho valori validi usa le i_c
 };
-
+Simulation welcome();
+}
 #endif
