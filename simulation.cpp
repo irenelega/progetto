@@ -25,7 +25,6 @@ void Simulation::evolve() {
     t = it->t;      // Imposta t all'ultimo valore di t
   }
 
-  std::cout << "Starting simulation in t = " << t << std::endl;
 
   auto it = data.end(); // prendi l'elemento dopo l'ultimo elemento del vettore
   --it;                 // Sposta l'iteratore sull'ultimo elemento del vettore
