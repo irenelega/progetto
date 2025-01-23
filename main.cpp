@@ -16,9 +16,9 @@ int main() {
 
     switch (input) {
     case 1: {
-      try{
-      simulation.evolve();
-      } catch (const std::runtime_error& e){
+      try {
+        simulation.evolve();
+      } catch (const std::runtime_error &e) {
         std::cerr << "Error: " << e.what() << std::endl;
       }
       break;
@@ -28,9 +28,9 @@ int main() {
       std::cout << "For how long do you want to evolve the system?: "
                 << std::endl;
       std::cin >> t;
-      try{
-      simulation.run(t);
-      } catch (const std::runtime_error& e){
+      try {
+        simulation.run(t);
+      } catch (const std::runtime_error &e) {
         std::cerr << "Error: " << e.what() << std::endl;
       }
       break;
@@ -46,18 +46,18 @@ int main() {
       break;
     }
     case 4: {
-      std::cout << "Preys and predators' estimated population for each dt:"
+      std::cout << "Preys and predators' estimated population for each dt"
                 << std::endl;
       std::vector<Population> data = simulation.print_data();
-      std::for_each(data.begin(), data.end(),
-                    [](const Population &P) { 
-                std::cout << "t = " << P.t << "\t\t"
-                << "x_rel = " << P.x << "\t\t"
-                << "y_rel = " << P.y << "\t\t"
-                << "H = " << P.H << std::endl; });
+      std::for_each(data.begin(), data.end(), [](const Population &P) {
+        std::cout << "t = " << P.t << "\t\t"
+                  << "x_rel = " << P.x << "\t\t"
+                  << "y_rel = " << P.y << "\t\t"
+                  << "H = " << P.H << std::endl;
+      });
       break;
     }
-      case 5: {
+    case 5: {
       simulation.reset();
       break;
     }
