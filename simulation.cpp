@@ -25,7 +25,6 @@ void Simulation::evolve() {
     t = it->t;      // Imposta t all'ultimo valore di t
   }
 
-
   auto it = data.end(); // prendi l'elemento dopo l'ultimo elemento del vettore
   --it;                 // Sposta l'iteratore sull'ultimo elemento del vettore
   auto const X = it->x; // chiama X l'x dell'ultimo elemento di data
@@ -39,8 +38,9 @@ void Simulation::evolve() {
 
   // Controllo che il valore corrente di x e y non sia negativo
   if (newX <= 0 || newY <= 0) {
-    throw std::runtime_error("The number of preys or predators went down to zero or "
-                 "less than zero.\n");
+    throw std::runtime_error(
+        "The number of preys or predators went down to zero or "
+        "less than zero.\n");
   }
 
   // Controllo che il valore corrente di x e y non sia infinito
@@ -126,24 +126,25 @@ Population Simulation::reset() {
   data.push_back(first_state); // Aggiungi l'elemento iniziale
 
   std::cout << "Evolution deleted. Back to initial conditions:" << std::endl;
-  
+
   return Population(first_state);
 }
 
 std::vector<Population> Simulation::print_data() {
-    // Calcola il punto di equilibrio
-    Population const eq{d / c, a / b}; 
+  // Calcola il punto di equilibrio
+  Population const eq{d / c, a / b};
 
-    // Crea un vettore per i dati normalizzati
-    std::vector<Population> norm_data(data.size());
+  // Crea un vettore per i dati normalizzati
+  std::vector<Population> norm_data(data.size());
 
-    // Usa std::transform per normalizzare i dati
-    std::transform(data.begin(), data.end(), norm_data.begin(),
-                   [this, eq](const Population& P) {
-                       return Population(P.x / eq.x, P.y / eq.y, calculate_H(), P.t); // Normalizza ogni elemento di data
-                   });
+  // Usa std::transform per normalizzare i dati
+  std::transform(data.begin(), data.end(), norm_data.begin(),
+                 [this, eq](const Population &P) {
+                   return Population(P.x / eq.x, P.y / eq.y, calculate_H(),
+                                     P.t); // Normalizza ogni elemento di data
+                 });
 
-    return norm_data;  // Restituisci il vettore normalizzato
+  return norm_data; // Restituisci il vettore normalizzato
 }
 
 Simulation welcome() {
@@ -184,4 +185,4 @@ Simulation welcome() {
 
   return Simulation(A, B, C, D, i_c);
 }
-}
+} // namespace LotkaVolterra
