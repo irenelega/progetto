@@ -52,7 +52,7 @@ public:
   std::vector<Population> run(double t); // Esegui la simulazione per un tempo t
   Population take_last();
   Population reset();
-std::vector<Population> print_data();
+  std::vector<Population> print_data();
 
   // Calcoli relativi all'equilibrio
   double relative_x() const;
@@ -61,5 +61,5 @@ std::vector<Population> print_data();
       const; // metto false predefinito così se non ho valori validi usa le i_c
 };
 Simulation welcome();
-}
+} // namespace LotkaVolterra
 #endif
