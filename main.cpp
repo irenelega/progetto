@@ -8,8 +8,9 @@ int main() {
         << "1-> Evolve populations to t+dt \n"
         << "2-> Evolve populations for selected runtime \n"
         << "3-> Return current normalized populations x(t), y(t), and H, t \n"
-        << "4-> Restart simulation and go back to initial conditions \n"
-        << "5-> Stop simulation" << std::endl;
+        << "4-> Print each evolution's dt \n"
+        << "5-> Restart simulation and go back to initial conditions \n"
+        << "6-> Stop simulation" << std::endl;
     int input;
     std::cin >> input;
 
@@ -38,16 +39,28 @@ int main() {
       Population P = simulation.take_last();
       std::cout << "Preys and predators' last estimated population"
                 << std::endl;
-      std::cout << "x_rel(" << P.t << ")=\t" << P.x << "\ny_rel(" << P.t
-                << ")=\t" << P.y << "\nH =\t" << P.H << "\nt = \t" << P.t
-                << std::endl;
+      std::cout << "t = " << P.t << "\t\t"
+                << "x_rel = " << P.x << "\t\t"
+                << "y_rel = " << P.y << "\t\t"
+                << "H = " << P.H << std::endl;
       break;
     }
     case 4: {
+      std::vector<Population> data = simulation.print_data();
+      std::for_each(data.begin(), data.end(),
+                    [](const Population &P) { std::cout << "Preys and predators' estimated population for each dt"
+                << std::endl;
+                std::cout << "t = " << P.t << "\t\t"
+                << "x_rel = " << P.x << "\t\t"
+                << "y_rel = " << P.y << "\t\t"
+                << "H = " << P.H << std::endl; });
+      break;
+    }
+      case 5: {
       simulation.reset();
       break;
     }
-    case 5: {
+    case 6: {
       std::cout << "Thank you, bye." << std::endl;
       return 0;
     }
