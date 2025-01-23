@@ -52,6 +52,7 @@ public:
   std::vector<Population> run(double t); // Esegui la simulazione per un tempo t
   Population take_last();
   Population reset();
+std::vector<Population> print_data();
 
   // Calcoli relativi all'equilibrio
   double relative_x() const;
