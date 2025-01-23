@@ -46,10 +46,11 @@ int main() {
       break;
     }
     case 4: {
+      std::cout << "Preys and predators' estimated population for each dt:"
+                << std::endl;
       std::vector<Population> data = simulation.print_data();
       std::for_each(data.begin(), data.end(),
-                    [](const Population &P) { std::cout << "Preys and predators' estimated population for each dt"
-                << std::endl;
+                    [](const Population &P) { 
                 std::cout << "t = " << P.t << "\t\t"
                 << "x_rel = " << P.x << "\t\t"
                 << "y_rel = " << P.y << "\t\t"
