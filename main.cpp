@@ -1,5 +1,5 @@
-#include "simulation.cpp"
-
+#include "simulation.hpp"
+using namespace LotkaVolterra;
 int main() {
   Simulation simulation = welcome();
   while (true) {
@@ -15,7 +15,11 @@ int main() {
 
     switch (input) {
     case 1: {
+      try{
       simulation.evolve();
+      } catch (const std::runtime_error& e){
+        std::cerr << "Error: " << e.what() << std::endl;
+      }
       break;
     }
     case 2: {
@@ -23,7 +27,11 @@ int main() {
       std::cout << "For how long do you want to evolve the system?: "
                 << std::endl;
       std::cin >> t;
+      try{
       simulation.run(t);
+      } catch (const std::runtime_error& e){
+        std::cerr << "Error: " << e.what() << std::endl;
+      }
       break;
     }
     case 3: {
