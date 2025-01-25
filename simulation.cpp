@@ -36,16 +36,18 @@ void Simulation::evolve() {
   // Incrementa il tempo
   t += dt;
 
-  // Controllo che il valore corrente di x e y non sia negativo
+    // Controllo che il valore corrente di x e y non sia infinito
+  if (std::isinf(newX) || std::isinf(newY)) {
+      std::cout << "preys: " << newX << ", predators: " << newY << std::endl;
+    throw std::runtime_error("Overflow during simulation.\n");
+  }
+    
+    // Controllo che il valore corrente di x e y non sia negativo
   if (newX <= 0 || newY <= 0) {
+      std::cout << "preys: " << newX << ", predators: " << newY << std::endl;
     throw std::runtime_error(
         "The number of preys or predators went down to zero or "
         "less than zero.\n");
-  }
-
-  // Controllo che il valore corrente di x e y non sia infinito
-  if (std::isinf(newX) || std::isinf(newY)) {
-    throw std::runtime_error("Overflow during simulation.\n");
   }
 
   // Calcola H per lo stato corrente
