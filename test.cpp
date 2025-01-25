@@ -4,14 +4,14 @@
 #include <stdexcept>
 using namespace LotkaVolterra;
 
-TEST_CASE("Simulation evolve() negative populations and overflow") {
+TEST_CASE("Simulation evolve() negative populations") {
   SUBCASE("Negative populations") {
-    Simulation sim(0.2, 0.1, 0.3, 0.2, {0, 5});
+    Simulation sim(10000, 0.1, 0.1, 0.1, {1000000, 100});
     CHECK_THROWS_AS(sim.evolve(), std::runtime_error);
   }
 
   SUBCASE("Overflow populations") {
-    Simulation sim(0.2, 0.1, 0.3, 0.2, {1e10, 1e10});
+    Simulation sim(0.2, 0.1, 0.3, 0.2, {100, 1e308});
     CHECK_THROWS_AS(sim.evolve(), std::runtime_error);
   }
 }
