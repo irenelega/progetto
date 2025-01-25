@@ -7,6 +7,8 @@ using namespace LotkaVolterra;
 TEST_CASE("Simulation evolve() negative populations") {
   SUBCASE("Negative populations") {
     Simulation sim(10000, 0.1, 0.1, 0.1, {1000000, 100});
+    sim.evolve();
+    sim.evolve();
     CHECK_THROWS_AS(sim.evolve(), std::runtime_error);
   }
 
