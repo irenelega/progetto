@@ -1,7 +1,6 @@
 #define DOCTEST_CONFIG_IMPLEMENT_WITH_MAIN
 #include "doctest.h"
 #include "simulation.hpp"
-#include "simulation.cpp"
 #include <stdexcept>
 using namespace LotkaVolterra;
 
@@ -78,12 +77,16 @@ TEST_CASE("Simulation calculate_H()") {
 
 TEST_CASE("Simulation relative_x()") {
   Simulation sim(0.2, 0.1, 0.3, 0.2, {10, 5});
+  sim.reset();
+  sim.evolve();
   double x_rel = sim.relative_x();
   CHECK(abs(x_rel - 14.9955) < 1e-6);
 }
 
 TEST_CASE("Simulation relative_y()") {
   Simulation sim(0.2, 0.1, 0.3, 0.2, {10, 5});
+  sim.reset();
+  sim.evolve();
   double y_rel = sim.relative_y();
   CHECK(abs(y_rel - 2.507) < 1e-6);
 }
