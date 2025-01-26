@@ -92,3 +92,26 @@ TEST_CASE("Simulation relative_y()") {
   double y_rel = sim.relative_y();
   CHECK(abs(y_rel - 2.507) < 1e-6);
 }
+
+TEST_CASE("Simulation normalization in print_data()") {
+  Population eq{10, 5};
+  std::vector<Population> data = {Population{20, 10}, Population{30, 15},
+                                  Population{40, 20}};
+
+  // Vettore per i dati normalizzati
+  std::vector<Population> norm_data(data.size());
+
+  std::transform(data.begin(), data.end(), norm_data.begin(),
+                 [&eq](const Population &P) {
+                   return Population(P.x / eq.x, P.y / eq.y, P.t);
+                 });
+
+  CHECK(abs(norm_data[0].x - 2.0) < 1e-6);
+  CHECK(abs(norm_data[0].y - 2.0) < 1e-6);
+
+  CHECK(abs(norm_data[1].x - 3.0) < 1e-6);
+  CHECK(abs(norm_data[1].y - 3.0) < 1e-6);
+
+  CHECK(abs(norm_data[2].x - 4.0) < 1e-6);
+  CHECK(abs(norm_data[2].y - 4.0) < 1e-6);
+}
