@@ -19,7 +19,14 @@ int main() {
       try {
         simulation.evolve();
       } catch (const std::runtime_error &e) {
-        std::cerr << "Error: " << e.what() << std::endl;
+        // Gestione dell'eccezione per i valori negativi
+        if (std::string(e.what()).find("went down to zero or less than zero") !=
+            std::string::npos) {
+          std::cerr << "Error: " << e.what() << std::endl;
+        } else if (std::string(e.what()).find("Overflow during simulation") !=
+                   std::string::npos) {
+          std::cerr << "Error: " << e.what() << std::endl;
+        }
       }
       break;
     }
@@ -31,7 +38,14 @@ int main() {
       try {
         simulation.run(t);
       } catch (const std::runtime_error &e) {
-        std::cerr << "Error: " << e.what() << std::endl;
+        // Gestione dell'eccezione per i valori negativi
+        if (std::string(e.what()).find("went down to zero or less than zero") !=
+            std::string::npos) {
+          std::cerr << "Error: " << e.what() << std::endl;
+        } else if (std::string(e.what()).find("Overflow during simulation") !=
+                   std::string::npos) {
+          std::cerr << "Error: " << e.what() << std::endl;
+        }
       }
       break;
     }
@@ -59,6 +73,8 @@ int main() {
     }
     case 5: {
       simulation.reset();
+      std::cout << "Evolution deleted. Back to initial conditions:"
+                << std::endl;
       break;
     }
     case 6: {
