@@ -36,17 +36,15 @@ void Simulation::evolve() {
   // Incrementa il tempo
   t += dt;
 
-    // Controllo che il valore corrente di x e y non sia infinito
+  // Controllo che il valore corrente di x e y non sia infinito
   if (std::isinf(newX) || std::isinf(newY)) {
-      std::cout << "preys: " << newX << ", predators: " << newY << std::endl;
-    throw std::runtime_error("Overflow during simulation.\n");
+    throw std::runtime_error("overflow during simulation.\n");
   }
-    
-    // Controllo che il valore corrente di x e y non sia negativo
+
+  // Controllo che il valore corrente di x e y non sia negativo
   if (newX <= 0 || newY <= 0) {
-      std::cout << "preys: " << newX << ", predators: " << newY << std::endl;
     throw std::runtime_error(
-        "The number of preys or predators went down to zero or "
+        "the number of preys or predators went down to zero or "
         "less than zero.\n");
   }
 
@@ -126,8 +124,6 @@ Population Simulation::reset() {
 
   data.clear();                // Pulisce il vettore data
   data.push_back(first_state); // Aggiungi l'elemento iniziale
-
-  std::cout << "Evolution deleted. Back to initial conditions:" << std::endl;
 
   return Population(first_state);
 }
