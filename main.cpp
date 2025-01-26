@@ -20,10 +20,11 @@ int main() {
         simulation.evolve();
       } catch (const std::runtime_error &e) {
         // Gestione dell'eccezione per i valori negativi
-        if (std::string(e.what()).find("went down to zero or less than zero") !=
+        if (std::string(e.what()).find("the number of preys or predators went "
+                                       "down to zero or less than zero") !=
             std::string::npos) {
           std::cerr << "Error: " << e.what() << std::endl;
-        } else if (std::string(e.what()).find("Overflow during simulation") !=
+        } else if (std::string(e.what()).find("overflow during simulation") !=
                    std::string::npos) {
           std::cerr << "Error: " << e.what() << std::endl;
         }
@@ -32,17 +33,18 @@ int main() {
     }
     case 2: {
       double t;
-      std::cout << "For how long do you want to evolve the system?: "
+      std::cout << "For how long do you want to evolve the system? "
                 << std::endl;
       std::cin >> t;
       try {
         simulation.run(t);
       } catch (const std::runtime_error &e) {
         // Gestione dell'eccezione per i valori negativi
-        if (std::string(e.what()).find("went down to zero or less than zero") !=
+        if (std::string(e.what()).find("the number of preys or predators went "
+                                       "down to zero or less than zero.") !=
             std::string::npos) {
           std::cerr << "Error: " << e.what() << std::endl;
-        } else if (std::string(e.what()).find("Overflow during simulation") !=
+        } else if (std::string(e.what()).find("overflow during simulation.") !=
                    std::string::npos) {
           std::cerr << "Error: " << e.what() << std::endl;
         }
@@ -51,7 +53,7 @@ int main() {
     }
     case 3: {
       Population P = simulation.take_last();
-      std::cout << "Preys and predators' last estimated population"
+      std::cout << "Preys and predators' last estimated population:"
                 << std::endl;
       std::cout << "t = " << P.t << "\t\t"
                 << "x_rel = " << P.x << "\t\t"
@@ -60,7 +62,7 @@ int main() {
       break;
     }
     case 4: {
-      std::cout << "Preys and predators' estimated population for each dt"
+      std::cout << "Preys and predators' estimated population for each dt:"
                 << std::endl;
       std::vector<Population> data = simulation.print_data();
       std::for_each(data.begin(), data.end(), [](const Population &P) {
@@ -73,7 +75,7 @@ int main() {
     }
     case 5: {
       simulation.reset();
-      std::cout << "Evolution deleted. Back to initial conditions:"
+      std::cout << "Evolution deleted. Back to initial conditions."
                 << std::endl;
       break;
     }
@@ -86,7 +88,7 @@ int main() {
         std::cin.clear(); // Rimuove il flag di errore
         std::cin.ignore(std::numeric_limits<std::streamsize>::max(),
                         '\n'); // Ignora il resto della riga
-        std::cerr << "Input not valid. Please, insert a number from 1 to 5."
+        std::cerr << "Input not valid. Please, insert a number from 1 to 5:"
                   << std::endl;
       }
     }
